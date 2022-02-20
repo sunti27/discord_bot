@@ -1,21 +1,25 @@
 mod cmds;
 mod event;
 mod help;
+mod utils;
 
 use serenity::client::{Client, validate_token};
 use serenity::framework::standard::StandardFramework;
 
 use std::env;
 
-use cmds::moderation;
+use cmds::{
+    moderation, owner
+};
 use event::Handler;
 
 #[tokio::main]
 async fn main() {
     let framework = StandardFramework::new()
         .configure(|c| c.prefix("!"))
+        .help(&help::HELP_COMMAND)
         .group(&moderation::MODERATION_GROUP)
-        .help(&help::HELP_COMMAND);
+        .group(&owner::OWNER_GROUP);
 
     let token = env::var("DISCORD_TOKEN")
         .expect("Token not found");
