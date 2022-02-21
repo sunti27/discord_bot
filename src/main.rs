@@ -9,17 +9,22 @@ use serenity::framework::standard::StandardFramework;
 use std::env;
 
 use cmds::{
-    moderation, owner
+    moderation, owner, execution
 };
-use event::Handler;
+use event::{
+    Handler,
+    after_hook
+};
 
 #[tokio::main]
 async fn main() {
     let framework = StandardFramework::new()
         .configure(|c| c.prefix("!"))
         .help(&help::HELP_COMMAND)
+        .after(after_hook)
         .group(&moderation::MODERATION_GROUP)
-        .group(&owner::OWNER_GROUP);
+        .group(&owner::OWNER_GROUP)
+        .group(&execution::EXECUTION_GROUP);
 
     let token = env::var("DISCORD_TOKEN")
         .expect("Token not found");
