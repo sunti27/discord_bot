@@ -8,6 +8,7 @@ use pyo3::types::PyDict;
 use crate::utils::validate;
 
 #[group]
+#[owners_only]
 #[commands(exec)]
 struct Execution;
 
@@ -36,13 +37,14 @@ async fn exec(ctx: &Context, msg: &Message) -> CommandResult {
         Ok(None)
     })?;
 
+    validate(&ctx, &msg).await?;
+
     if let Some(output) = output {
         if !output.trim().is_empty() {
             msg.reply(&ctx, format_outut(output)).await?;
         }
     }
 
-    validate(&ctx, &msg).await?;
     Ok(())
 }
 
@@ -91,5 +93,5 @@ fn format_code(content: &str) -> String {
 }
 
 fn format_outut(output: String) -> String {
-    format!("Output:\n```py\n{}\n```", output)
+    format!("Output:\n```py\n> {}\n```", output)
 }

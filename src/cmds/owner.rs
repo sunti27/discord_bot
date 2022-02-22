@@ -5,5 +5,6 @@ use serenity::framework::standard::{CommandError, CommandResult, macros::{comman
 
 
 #[group]
+#[owners_only]
 struct Owner;
 
